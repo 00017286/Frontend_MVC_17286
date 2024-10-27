@@ -17,6 +17,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.Urls.Add("http://*:5000");
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
