@@ -5,7 +5,7 @@ using WebApplication1_17286.Models;
 
 public class PerformerController : Controller
 {
-    private readonly string _baseUrl = "https://localhost:44312/"; // Base URL for API
+    private readonly string _baseUrl = "http://ec2-34-200-212-116.compute-1.amazonaws.com:44312/"; // Base URL for API
 
     // GET: Performer
     public async Task<IActionResult> Index()
