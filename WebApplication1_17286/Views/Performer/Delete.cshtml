@@ -1,0 +1,24 @@
+﻿@model WebApplication1_17286.Models.Performer
+
+<h2>Delete Performer</h2>
+<p>Are you sure you want to delete this performer?</p>
+
+<div>
+    <h4>@Model.Name</h4>
+    <dl>
+        <dt>Genre</dt>
+        <dd>@Model.Genre</dd>
+
+        <dt>Birth Date</dt>
+        <dd>@Model.BirthDate.ToShortDateString()</dd>
+
+        <dt>Country</dt>
+        <dd>@Model.Country</dd>
+    </dl>
+
+    <form asp-action="Delete" method="post">
+        <input type="hidden" asp-for="Id" />
+        <button type="submit">Delete</button>
+        <a asp-action="Index">Cancel</a>
+    </form>
+</div>

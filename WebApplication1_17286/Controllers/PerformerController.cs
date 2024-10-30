@@ -29,8 +29,43 @@ public class PerformerController : Controller
         }
     }
 
-    // GET: Performer/{performerId}
-    public async Task<IActionResult> Details(int id)
+    // GET: Performer/Create
+    public IActionResult Create()
+    {
+        return View(); // Return view for creating a new performer
+    }
+
+    // POST: Performer/Create
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create(Performer performer)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(performer); // Return the form with errors if model validation fails.
+        }
+
+        using (var client = new HttpClient())
+        {
+            client.BaseAddress = new Uri(_baseUrl); // Set base address
+            client.DefaultRequestHeaders.Clear(); // Clear headers
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json")); // Set content type
+
+            var json = JsonConvert.SerializeObject(performer); // Serialize performer to JSON
+            var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json"); // Create content for POST
+
+            HttpResponseMessage response = await client.PostAsync("api/Performer", content); // Send POST request
+
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToAction(nameof(Index)); // Redirect on success
+            }
+            return View(performer); // Return view with errors if creation fails
+        }
+    }
+
+    // GET: Performer/Edit/5
+    public async Task<IActionResult> Edit(int id)
     {
         Performer performer = null; // Placeholder for performer
         using (var client = new HttpClient())
@@ -56,41 +91,14 @@ public class PerformerController : Controller
         }
     }
 
-    // POST: Performer
+    // POST: Performer/Edit/5
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] Performer performer)
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(int id, Performer performer)
     {
-        if (performer == null)
+        if (id != performer.Id || !ModelState.IsValid)
         {
-            return BadRequest(); // Return 400 if input invalid
-        }
-
-        using (var client = new HttpClient())
-        {
-            client.BaseAddress = new Uri(_baseUrl); // Set base address
-            client.DefaultRequestHeaders.Clear(); // Clear headers
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json")); // Set content type
-
-            var json = JsonConvert.SerializeObject(performer); // Serialize performer to JSON
-            var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json"); // Create content for POST
-
-            HttpResponseMessage response = await client.PostAsync("api/Performer", content); // Send POST request
-
-            if (response.IsSuccessStatusCode)
-            {
-                return RedirectToAction(nameof(Index)); // Redirect on success
-            }
-            return BadRequest(); // Return 400 if creation fails
-        }
-    }
-
-    // PUT: Performer/{performerId}
-    [HttpPut("{id}")]
-    public async Task<IActionResult> Edit(int id, [FromBody] Performer performer)
-    {
-        if (performer == null || performer.Id != id)
-        {
-            return BadRequest(); // Return 400 if input invalid
+            return View(performer); // Return the form with errors if model validation fails.
         }
 
         using (var client = new HttpClient())
@@ -108,13 +116,41 @@ public class PerformerController : Controller
             {
                 return RedirectToAction(nameof(Index)); // Redirect on success
             }
-            return BadRequest(); // Return 400 if update fails
+            return View(performer); // Return view with errors if update fails
         }
     }
 
-    // DELETE: Performer/{performerId}
-    [HttpDelete("{id}")]
+    // GET: Performer/Delete/5
     public async Task<IActionResult> Delete(int id)
+    {
+        Performer performer = null; // Placeholder for performer
+        using (var client = new HttpClient())
+        {
+            client.BaseAddress = new Uri(_baseUrl); // Set base address
+            client.DefaultRequestHeaders.Clear(); // Clear headers
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json")); // Set content type
+
+            HttpResponseMessage response = await client.GetAsync($"api/Performer/{id}"); // Send GET request for specific performer
+
+            if (response.IsSuccessStatusCode)
+            {
+                var responseContent = await response.Content.ReadAsStringAsync(); // Read response
+                performer = JsonConvert.DeserializeObject<Performer>(responseContent); // Deserialize JSON
+            }
+
+            if (performer == null)
+            {
+                return NotFound(); // Return 404 if performer not found
+            }
+
+            return View(performer); // Return view with performer
+        }
+    }
+
+    // POST: Performer/Delete/5
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmed(int id)
     {
         using (var client = new HttpClient())
         {
@@ -131,5 +167,4 @@ public class PerformerController : Controller
             return NotFound(); // Return 404 if deletion fails
         }
     }
-
 }
