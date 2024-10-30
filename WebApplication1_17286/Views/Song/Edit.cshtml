@@ -1,0 +1,27 @@
+﻿@model WebApplication1_17286.Models.Song
+
+<h2>Edit Song</h2>
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+
+    <div>
+        <label>Title:</label>
+        <input asp-for="Title" />
+    </div>
+    <div>
+        <label>Genre:</label>
+        <input asp-for="Genre" />
+    </div>
+    <div>
+        <label>Release Year:</label>
+        <input asp-for="ReleaseYear" type="number" />
+    </div>
+    <div>
+        <label>Performer:</label>
+        <!-- Assuming Performer has a Name field -->
+        <input asp-for="SongPerformer.Name" placeholder="Performer Name" />
+    </div>
+
+    <button type="submit">Save</button>
+    <a asp-action="Index">Cancel</a>
+</form>
