@@ -10,19 +10,15 @@
         <dd>@Model.Genre</dd>
 
         <dt>Birth Date</dt>
-        <dd>@Model.BirthDate.ToString("d")</dd>
+        <dd>@Model.BirthDate.ToShortDateString()</dd>
 
         <dt>Country</dt>
         <dd>@Model.Country</dd>
     </dl>
 
-    <form asp-action="DeleteConfirmed" method="post">
-        <input type="hidden" asp-for="Id" /> <!-- Hidden field for the ID -->
+    <form asp-action="DeleteConfirmed" method="post"> <!-- Измените на "DeleteConfirmed" -->
+        <input type="hidden" asp-for="Id" />
         <button type="submit">Delete</button>
         <a asp-action="Index">Cancel</a>
     </form>
 </div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
