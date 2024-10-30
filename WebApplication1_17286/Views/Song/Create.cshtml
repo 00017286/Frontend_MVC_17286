@@ -1,4 +1,4 @@
-﻿@model WebApplication1_17286.Models.Song
+@model WebApplication1_17286.Models.Song
 
 <h2>Create a New Song</h2>
 <form asp-action="Create" method="post">
@@ -16,8 +16,7 @@
     </div>
     <div>
         <label>Performer:</label>
-        <!-- Assuming Performer has fields like Name in its definition -->
-        <input asp-for="SongPerformer.Name" placeholder="Performer Name" />
+        <input asp-for="SongPerformer.Id" placeholder="Performer Id" />
     </div>
     <button type="submit">Create</button>
 </form>
