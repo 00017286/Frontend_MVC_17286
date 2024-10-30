@@ -1,4 +1,4 @@
-﻿@model WebApplication1_17286.Models.Performer
+@model WebApplication1_17286.Models.Performer
 
 <h2>Delete Performer</h2>
 <p>Are you sure you want to delete this performer?</p>
@@ -10,15 +10,19 @@
         <dd>@Model.Genre</dd>
 
         <dt>Birth Date</dt>
-        <dd>@Model.BirthDate.ToShortDateString()</dd>
+        <dd>@Model.BirthDate.ToString("d")</dd>
 
         <dt>Country</dt>
         <dd>@Model.Country</dd>
     </dl>
 
-    <form asp-action="Delete" method="post">
-        <input type="hidden" asp-for="Id" />
+    <form asp-action="DeleteConfirmed" method="post">
+        <input type="hidden" asp-for="Id" /> <!-- Hidden field for the ID -->
         <button type="submit">Delete</button>
         <a asp-action="Index">Cancel</a>
     </form>
 </div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
